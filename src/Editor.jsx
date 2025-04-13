@@ -1,31 +1,31 @@
 import React, { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
 import Quill from 'quill';
-import ImageResize from './resize';
+import ImageResize from './quill-img-resize/resize';
 
 Quill.register("modules/imageResize", ImageResize);
 
 const Editor = forwardRef(
-    ({ readOnly, defaultValue, onTextChange, onSelectionChange }, ref) => {
-      const toolbarOptions = [
-          ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-          ['blockquote', 'code-block'],
-          ['link', 'image', 'video', 'formula'],
-        
-          [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-          [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
-          [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-          [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-          [{ 'direction': 'rtl' }],                         // text direction
-        
-          [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        
-          [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-          [{ 'font': [] }],
-          [{ 'align': [] }],
-        
-          ['clean']                                         // remove formatting button
-        ];
+  ({ readOnly, defaultValue, onTextChange, onSelectionChange }, ref) => {
+    const toolbarOptions = [
+      ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+      ['blockquote', 'code-block'],
+      ['link', 'image', 'video', 'formula'],
+
+      [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
+      [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+      [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+      [{ 'direction': 'rtl' }],                         // text direction
+
+      [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      [{ 'font': [] }],
+      [{ 'align': [] }],
+
+      ['clean']                                         // remove formatting button
+    ];
     const containerRef = useRef(null);
     const defaultValueRef = useRef(defaultValue);
     const onTextChangeRef = useRef(onTextChange);
@@ -47,9 +47,9 @@ const Editor = forwardRef(
       );
       const quill = new Quill(editorContainer, {
         modules: {
-        syntax: true,
+          syntax: true,
           toolbar: toolbarOptions,
-          imageResize: true,
+          imageResize: true
         },
         placeholder: 'Compose an epic...',
         theme: 'snow',

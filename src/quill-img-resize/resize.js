@@ -105,8 +105,18 @@ class ImageResize {
 
     const dx = evt.clientX - this.startX;
     const dy = evt.clientY - this.startY;
-    this.img.style.width = `${this.startWidth + dx}px`;
-    this.img.style.height = `${this.startHeight + dy}px`;
+
+    if (evt.shiftKey) {
+      // Shift for vertical
+      this.img.style.height = `${this.startHeight + dy}px`;
+    } else if (evt.altKey) {
+      // Alt for horizontal
+      this.img.style.width = `${this.startWidth + dx}px`;
+    } else {
+      // Default
+      this.img.style.width = `${this.startWidth + dx}px`;
+      this.img.style.height = `${this.startHeight + dy}px`;
+    }
 
     this.updateOverlayPosition();
   };
@@ -114,6 +124,7 @@ class ImageResize {
   stopResize = () => {
     document.body.style.userSelect = "";
     document.removeEventListener("mousemove", this.onResize);
+    document.removeEventListener("mouseup", this.stopResize);
   };
 
   hide() {
