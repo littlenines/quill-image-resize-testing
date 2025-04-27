@@ -1,8 +1,11 @@
 import React, { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
 import Quill from 'quill';
-import ImageResize from './quill-img-resize/resize';
+import ImageResize from './quill-img-resize/ImageResize';
 
-Quill.register("modules/imageResize", ImageResize);
+
+if (!Quill.imports['modules/imageResize']) {
+  Quill.register('modules/imageResize', ImageResize);
+}
 
 const Editor = forwardRef(
   ({ readOnly, defaultValue, onTextChange, onSelectionChange }, ref) => {
@@ -72,6 +75,10 @@ const Editor = forwardRef(
       return () => {
         ref.current = null;
         container.innerHTML = '';
+        const imageResize = quill.getModule('imageResize');
+        if (imageResize && typeof imageResize.destroy === 'function') {
+          imageResize.destroy();
+        }
       };
     }, [ref]);
 

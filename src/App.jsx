@@ -3,7 +3,6 @@ import Editor from './Editor';
 
 const App = () => {
   const [range, setRange] = useState();
-  const [lastChange, setLastChange] = useState();
   const [readOnly, setReadOnly] = useState(false);
 
   const quillRef = useRef();
@@ -14,7 +13,6 @@ const App = () => {
         ref={quillRef}
         readOnly={readOnly}
         onSelectionChange={setRange}
-        onTextChange={setLastChange}
       />
       <div>
         <label>
@@ -37,10 +35,6 @@ const App = () => {
       <div >
         <div >Current Range:</div>
         {range ? JSON.stringify(range) : 'Empty'}
-      </div>
-      <div >
-        <div>Last Change:</div>
-        {lastChange ? JSON.stringify(lastChange.ops) : 'Empty'}
       </div>
     </div>
   );
