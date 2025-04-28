@@ -1,9 +1,10 @@
 export class DragController {
-  constructor(minWidth, minHeight, overlayManager, displaySizeManager) {
+  constructor(minWidth, minHeight, overlayManager, displaySizeManager, tooltipInfoManager) {
     this.minWidth = minWidth;
     this.minHeight = minHeight;
     this.overlayManager = overlayManager;
     this.displaySizeManager = displaySizeManager;
+    this.tooltipInfoManager = tooltipInfoManager;
 
     this.img = null;
     this.dragBox = null;
@@ -18,6 +19,10 @@ export class DragController {
 
   setDisplaySizeManager(displaySizeManager) {
     this.displaySizeManager = displaySizeManager;
+  }
+
+  setTooltipInfoManager(tooltipInfoManager) {
+    this.tooltipInfoManager = tooltipInfoManager;
   }
 
   addEventListeners() {
@@ -105,6 +110,7 @@ export class DragController {
     if (this.overlayManager) this.overlayManager.reposition(this.img);
 
     if (this.displaySizeManager) this.displaySizeManager.update();
+    if (this.tooltipInfoManager) this.tooltipInfoManager.update();
 
     this.startX = clientX;
     this.startY = clientY;

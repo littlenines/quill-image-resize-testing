@@ -5,26 +5,40 @@ import { OverlayManager } from "./managers/OverlayManager.js";
 import { HandleManager } from "./managers/HandleManager.js";
 import { DragController } from "./managers/DragController.js";
 import { DisplaySizeManager } from "./managers/DisplaySizeManager.js";
+import { TooltipInfoManager } from "./managers/TooltipInfoManager.js";
 import './imageResize.css'
 
 export default class ImageResize extends Module {
     constructor(quill, options = {}) {
         super(quill, options);
         this.quill = quill;
-        this.options = { ...DEFAULT_OPTIONS, ...options };
+        this.options = { helpIcon: true, ...DEFAULT_OPTIONS, ...options };
         this.img = null;
 
         this.overlayManager = new OverlayManager(this.quill.root.parentNode, this.options.overlayStyles);
-        this.dragController = new DragController(this.options.minWidth, this.options.minHeight, this.overlayManager, null);
+        this.dragController = new DragController(this.options.minWidth, this.options.minHeight, this.overlayManager, null, null);
 
+        this.bindHandlers();
+        this.addEventListeners();
+    }
+
+    bindHandlers() {
         this.handleClick = this.handleClick.bind(this);
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
         this.handleTextChange = this.handleTextChange.bind(this);
         this.handleMousedown = this.handleMousedown.bind(this);
+    }
 
+    addEventListeners() {
         this.quill.root.addEventListener("click", this.handleClick);
         this.quill.on("selection-change", this.handleSelectionChange);
         this.quill.on("text-change", this.handleTextChange);
+    }
+
+    removeEventListeners() {
+        this.quill.root.removeEventListener("click", this.handleClick);
+        this.quill.off("selection-change", this.handleSelectionChange);
+        this.quill.off("text-change", this.handleTextChange);
     }
 
     handleClick(evt) {
@@ -35,10 +49,7 @@ export default class ImageResize extends Module {
     }
 
     handleSelectionChange(range) {
-        if (!range) {
-            this.hide();
-            return;
-        }
+        if (!range) return this.hide();
 
         const [blot] = this.quill.scroll.descendant(this.quill.constructor.import('formats/image'), range.index);
 
@@ -67,6 +78,7 @@ export default class ImageResize extends Module {
             } else {
                 this.overlayManager.reposition(this.img);
                 if (this.displaySizeManager) this.displaySizeManager.update();
+                if (this.tooltipInfoManager) this.tooltipInfoManager.update();
             }
         }
     }
@@ -84,14 +96,28 @@ export default class ImageResize extends Module {
 
         this.displaySizeManager = new DisplaySizeManager(this.overlayManager.overlay, this.img);
         this.displaySizeManager.create();
+
+        if (this.options.helpIcon) {
+            this.tooltipInfoManager = new TooltipInfoManager(this.overlayManager.overlay);
+            this.tooltipInfoManager.create();
+            this.dragController.setTooltipInfoManager(this.tooltipInfoManager);
+        }
+
         this.dragController.setDisplaySizeManager(this.displaySizeManager);
     }
 
     hide() {
         if (this.handleManager) this.handleManager.removeHandles();
         this.overlayManager.remove();
+
         if (this.displaySizeManager) this.displaySizeManager.remove();
         this.displaySizeManager = null;
+
+        if (this.tooltipInfoManager) {
+            this.tooltipInfoManager.remove();
+            this.tooltipInfoManager = null;
+        }
+
         this.img = null;
     }
 
@@ -101,9 +127,7 @@ export default class ImageResize extends Module {
     }
 
     destroy() {
-        this.quill.root.removeEventListener("click", this.handleClick);
-        this.quill.off("selection-change", this.handleSelectionChange);
-        this.quill.off("text-change", this.handleTextChange);
+        this.removeEventListeners();
         this.hide();
     }
 }
