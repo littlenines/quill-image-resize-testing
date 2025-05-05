@@ -1,4 +1,3 @@
-// === ImageResize.js ===
 import { Module } from "quill";
 import { DEFAULT_OPTIONS } from "./constants.js";
 import { OverlayManager } from "./managers/OverlayManager.js";
