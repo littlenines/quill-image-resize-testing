@@ -1,4 +1,3 @@
-// === OverlayManager.js ===
 export class OverlayManager {
     constructor(parent, styles) {
         this.parent = parent;

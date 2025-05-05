@@ -12,11 +12,13 @@ export default class ImageResize extends Module {
     constructor(quill, options = {}) {
         super(quill, options);
         this.quill = quill;
-        this.options = { helpIcon: true, ...DEFAULT_OPTIONS, ...options };
+        this.options = { helpIcon: true, displaySize: true, styleSelection: true, ...DEFAULT_OPTIONS, ...options };
         this.img = null;
 
         this.overlayManager = new OverlayManager(this.quill.root.parentNode, this.options.overlayStyles);
         this.dragController = new DragController(this.options.minWidth, this.options.minHeight, this.overlayManager, null, null);
+
+        this.imageFormat = this.quill.constructor.import('formats/image');
 
         this.bindHandlers();
         this.addEventListeners();
@@ -63,11 +65,11 @@ export default class ImageResize extends Module {
     }
 
     disableTextSelection() {
-        this.quill.root.classList.add('no-selection');
+        if (this.options.styleSelection) this.quill.root.classList.add(this.options.noSelectionClass);
     }
 
     enableTextSelection() {
-        this.quill.root.classList.remove('no-selection');
+        if (this.options.styleSelection) this.quill.root.classList.remove(this.options.noSelectionClass);
     }
 
     handleTextChange() {
@@ -85,6 +87,7 @@ export default class ImageResize extends Module {
 
     show(img) {
         if (this.img === img) return;
+        if (!img || !(img instanceof HTMLImageElement)) return;
 
         this.hide();
 
@@ -94,19 +97,23 @@ export default class ImageResize extends Module {
         this.handleManager.createHandles();
         this.overlayManager.reposition(this.img);
 
-        this.displaySizeManager = new DisplaySizeManager(this.overlayManager.overlay, this.img);
-        this.displaySizeManager.create();
+        if (this.options.displaySize) {
+            this.displaySizeManager = new DisplaySizeManager(this.overlayManager.overlay, this.img);
+            this.displaySizeManager.create();
+            this.dragController.setDisplaySizeManager(this.displaySizeManager);
+        }
 
         if (this.options.helpIcon) {
             this.tooltipInfoManager = new TooltipInfoManager(this.overlayManager.overlay);
             this.tooltipInfoManager.create();
             this.dragController.setTooltipInfoManager(this.tooltipInfoManager);
         }
-
-        this.dragController.setDisplaySizeManager(this.displaySizeManager);
     }
 
     hide() {
+        this.dragController.setDisplaySizeManager(null);
+        this.dragController.setTooltipInfoManager(null);
+
         if (this.handleManager) this.handleManager.removeHandles();
         this.overlayManager.remove();
 

@@ -51,6 +51,8 @@ export class TooltipInfoManager {
   }
 
   remove() {
+    if (!this.icon && !this.tooltip) return;
+
     if (this.icon) {
       this.icon.removeEventListener("mouseenter", this.handleMouseEnter);
       this.icon.removeEventListener("mouseleave", this.handleMouseLeave);
@@ -62,5 +64,6 @@ export class TooltipInfoManager {
       this.tooltip.remove();
       this.tooltip = null;
     }
+    this.overlay = null;
   }
 }

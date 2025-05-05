@@ -2,7 +2,6 @@ import React, { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
 import Quill from 'quill';
 import ImageResize from './quill-img-resize/ImageResize';
 
-
 if (!Quill.imports['modules/imageResize']) {
   Quill.register('modules/imageResize', ImageResize);
 }
@@ -10,24 +9,24 @@ if (!Quill.imports['modules/imageResize']) {
 const Editor = forwardRef(
   ({ readOnly, defaultValue, onTextChange, onSelectionChange }, ref) => {
     const toolbarOptions = [
-      ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+      ['bold', 'italic', 'underline', 'strike'],
       ['blockquote', 'code-block'],
       ['link', 'image', 'video', 'formula'],
 
-      [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+      [{ 'header': 1 }, { 'header': 2 }],
       [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
-      [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-      [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-      [{ 'direction': 'rtl' }],                         // text direction
+      [{ 'script': 'sub' }, { 'script': 'super' }],
+      [{ 'indent': '-1' }, { 'indent': '+1' }],
+      [{ 'direction': 'rtl' }],
 
-      [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+      [{ 'size': ['small', false, 'large', 'huge'] }],
       [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
-      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      [{ 'color': [] }, { 'background': [] }],
       [{ 'font': [] }],
       [{ 'align': [] }],
 
-      ['clean']                                         // remove formatting button
+      ['clean']
     ];
     const containerRef = useRef(null);
     const defaultValueRef = useRef(defaultValue);
@@ -52,7 +51,7 @@ const Editor = forwardRef(
         modules: {
           syntax: true,
           toolbar: toolbarOptions,
-          imageResize: true
+          imageResize: true,
         },
         placeholder: 'Compose an epic...',
         theme: 'snow',

@@ -5,6 +5,7 @@ const COLOR_TEXT = "#fff";
 export const DEFAULT_OPTIONS = {
   minWidth: 16,
   minHeight: 16,
+  noSelectionClass: 'no-selection',
 
   handleStyles: {
     position: "absolute",

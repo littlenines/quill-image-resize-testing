@@ -1,4 +1,3 @@
-// === HandleManager.js ===
 export class HandleManager {
     constructor(overlay, positions, handleStyles, mousedownCallback) {
         this.overlay = overlay;
@@ -33,6 +32,11 @@ export class HandleManager {
             box.ontouchstart = null;
             box.remove();
         });
+        
         this.boxes = [];
+        this.overlay = null;
+        this.positions = null;
+        this.handleStyles = null;
+        this.mousedownCallback = null;
     }
 }

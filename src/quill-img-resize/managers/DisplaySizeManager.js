@@ -39,6 +39,8 @@ export class DisplaySizeManager {
         if (this.display) {
             this.display.remove();
             this.display = null;
+            this.overlay = null;
+            this.img = null;
         }
     }
 }
