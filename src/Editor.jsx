@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { forwardRef, useEffect, useRef } from 'react';
 import Quill from 'quill';
 import ImageResize from './quill-img-resize/ImageResize';
 
@@ -7,7 +7,7 @@ if (!Quill.imports['modules/imageResize']) {
 }
 
 const Editor = forwardRef(
-  ({ readOnly, defaultValue, onTextChange, onSelectionChange }, ref) => {
+  ({ defaultValue }, ref) => {
     const toolbarOptions = [
       ['bold', 'italic', 'underline', 'strike'],
       ['blockquote', 'code-block'],
@@ -30,17 +30,6 @@ const Editor = forwardRef(
     ];
     const containerRef = useRef(null);
     const defaultValueRef = useRef(defaultValue);
-    const onTextChangeRef = useRef(onTextChange);
-    const onSelectionChangeRef = useRef(onSelectionChange);
-
-    useLayoutEffect(() => {
-      onTextChangeRef.current = onTextChange;
-      onSelectionChangeRef.current = onSelectionChange;
-    });
-
-    useEffect(() => {
-      ref.current?.enable(!readOnly);
-    }, [ref, readOnly]);
 
     useEffect(() => {
       const container = containerRef.current;
@@ -63,17 +52,19 @@ const Editor = forwardRef(
         quill.setContents(defaultValueRef.current);
       }
 
-      quill.on(Quill.events.TEXT_CHANGE, (...args) => {
-        onTextChangeRef.current?.(...args);
-      });
+      // quill.on(Quill.events.TEXT_CHANGE, (...args) => {
+      //   onTextChangeRef.current?.(...args);
+      // });
 
-      quill.on(Quill.events.SELECTION_CHANGE, (...args) => {
-        onSelectionChangeRef.current?.(...args);
-      });
+      // quill.on(Quill.events.SELECTION_CHANGE, (...args) => {
+      //   onSelectionChangeRef.current?.(...args);
+      // });
 
       return () => {
         ref.current = null;
         container.innerHTML = '';
+        quill.disable();
+        quill.root.innerHTML = '';
         const imageResize = quill.getModule('imageResize');
         if (imageResize && typeof imageResize.destroy === 'function') {
           imageResize.destroy();

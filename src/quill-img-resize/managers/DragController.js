@@ -123,4 +123,13 @@ export class DragController {
     this.img = null;
     this.dragBox = null;
   }
+
+  destroy() {
+  this.removeEventListeners();
+  this.img = null;
+  this.dragBox = null;
+  this.overlayManager = null;
+  this.displaySizeManager = null;
+  this.tooltipInfoManager = null;
+}
 }

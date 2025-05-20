@@ -135,5 +135,7 @@ export default class ImageResize extends Module {
     destroy() {
         this.removeEventListeners();
         this.hide();
+        this.dragController?.destroy();
+        this.dragController = null;
     }
 }

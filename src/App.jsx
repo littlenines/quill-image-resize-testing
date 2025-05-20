@@ -1,40 +1,16 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import Editor from './Editor';
+import { Link } from 'react-router';
 
 const App = () => {
-  const [range, setRange] = useState();
-  const [readOnly, setReadOnly] = useState(false);
 
   const quillRef = useRef();
 
   return (
     <div style={{height: '600px'}}>
-      <Editor
-        ref={quillRef}
-        readOnly={readOnly}
-        onSelectionChange={setRange}
-      />
+      <Editor ref={quillRef} />
       <div>
-        <label>
-          Read Only:{' '}
-          <input
-            type="checkbox"
-            value={readOnly}
-            onChange={(e) => setReadOnly(e.target.checked)}
-          />
-        </label>
-        <button
-          type="button"
-          onClick={() => {
-            alert(quillRef.current?.getLength());
-          }}
-        >
-          Get Content Length
-        </button>
-      </div>
-      <div >
-        <div >Current Range:</div>
-        {range ? JSON.stringify(range) : 'Empty'}
+        <Link to="/test-page">Another Page</Link>
       </div>
     </div>
   );
