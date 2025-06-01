@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef } from 'react';
+import { forwardRef, useEffect, useRef } from 'react';
 import Quill from 'quill';
 import ImageResize from './quill-img-resize/ImageResize';
 
@@ -66,14 +66,12 @@ const Editor = forwardRef(
         quill.disable();
         quill.root.innerHTML = '';
         const imageResize = quill.getModule('imageResize');
-        if (imageResize && typeof imageResize.destroy === 'function') {
-          imageResize.destroy();
-        }
+        if (imageResize && typeof imageResize.destroy === 'function') imageResize.destroy();
       };
     }, [ref]);
 
     return <div ref={containerRef}></div>;
-  },
+  }
 );
 
 Editor.displayName = 'Editor';

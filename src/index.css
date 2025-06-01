@@ -1,3 +1,6 @@
-/* .ql-container {
-    height: 700px;
-} */
+/* For scroll problem use min and max width and overflow */
+.ql-container {
+    max-height: 500px;
+    min-height: 500px;
+    overflow: auto;
+}
