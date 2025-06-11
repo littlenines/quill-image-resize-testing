@@ -41,7 +41,7 @@ export class TooltipInfoManager {
     
     const iconRect = this.icon.getBoundingClientRect();
 
-    const top = iconRect.top - 40;
+    const top = this.icon.offsetTop + 25;
     const left = iconRect.left - 100;
 
     Object.assign(this.tooltip.style, {
